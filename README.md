@@ -1,122 +1,146 @@
-# AI Agent Onchain Framework
+# AI Onchain Framework
 
-A comprehensive framework for building AI-powered agents that can interact with blockchain networks. This framework combines the power of AI with onchain operations to create intelligent agents that can:
+A powerful framework for AI-powered onchain operations and DeFi interactions.
 
-- Execute complex DeFi strategies autonomously
-- Perform natural language interactions with blockchain protocols
-- Make data-driven decisions using onchain and market data
-- Automate trading and portfolio management
-- Monitor and respond to onchain events
+## Features
 
-## Core Capabilities
+- **Smart Order Routing**
+  - Multi-DEX aggregation
+  - Split order optimization
+  - Gas-aware routing
+  - Price impact analysis
 
-### DeFi Operations
-- Swapping tokens on DEXs (Uniswap V2)
-- Adding/removing liquidity from pools
-- Borrowing and lending on Aave V3
-- Token transfers and approvals
-- Smart contract interactions
+- **Portfolio Analytics**
+  - Risk metrics tracking
+  - Performance analysis
+  - Position management
+  - Real-time portfolio monitoring
 
-### AI Integration
-- Natural language processing for commands
-- Market sentiment analysis
-- Price prediction and trend analysis
-- Risk assessment and portfolio optimization
-- Automated strategy execution
+- **Gas Optimization**
+  - Dynamic gas pricing
+  - MEV protection
+  - Transaction simulation
+  - Network congestion monitoring
 
-### Protocol Support
-- Uniswap V2/V3
-- Aave V3
-- Chainlink Price Feeds
-- Custom smart contract integration
-- Multi-chain support (coming soon)
+- **Cross-Chain Bridge**
+  - Multi-bridge support (LayerZero, Hop, Across)
+  - Best route finding
+  - Bridge fee optimization
+  - Transaction monitoring
 
 ## Installation
 
 ```bash
-npm install
+npm install ai-onchain-framework
+```
+
+## Quick Start
+
+```typescript
+import { EVMAgent } from 'ai-onchain-framework';
+
+// Initialize agent
+const agent = new EVMAgent({
+  rpcUrl: process.env.RPC_URL,
+  privateKey: process.env.PRIVATE_KEY
+});
+
+// Smart order routing
+const route = await agent.findBestRoute({
+  tokenIn: '0x...',  // USDC
+  tokenOut: '0x...', // WETH
+  amount: '1000000000', // 1000 USDC
+  maxSlippage: 0.5,
+  protocols: ['Uniswap', '1inch']
+});
+
+// Execute swap
+await agent.executeRoute(route);
+
+// Portfolio analysis
+const portfolio = await agent.analyzePortfolio([
+  '0x...', // USDC
+  '0x...'  // WETH
+]);
+
+// Bridge assets
+const bridgeQuote = await agent.getBridgeQuote({
+  sourceChain: 'ethereum',
+  targetChain: 'bnb',
+  token: '0x...', // USDC
+  amount: '1000000000',
+  bridgeProtocol: 'LayerZero'
+});
+
+await agent.bridge(bridgeQuote);
+
+// Monitor price changes
+agent.on('priceChange', (data) => {
+  console.log(`Price changed: ${data.token} ${data.price}`);
+});
+
+// Monitor health factor
+agent.on('healthFactorChange', (data) => {
+  console.log(`Health factor: ${data.healthFactor}`);
+});
+```
+
+## Advanced Usage
+
+### Gas Optimization
+
+```typescript
+// Set gas strategy
+await agent.setGasStrategy({
+  type: 'aggressive',
+  maxPriorityFee: BigInt(3000000000), // 3 Gwei
+  maxFeePerGas: BigInt(50000000000),  // 50 Gwei
+  flashbotsEnabled: true
+});
+
+// Enable MEV protection
+await agent.enableMEVProtection();
+```
+
+### Split Orders
+
+```typescript
+const splitRoute = await agent.splitOrder({
+  tokenIn: '0x...',  // USDC
+  tokenOut: '0x...', // WETH
+  amount: '5000000000', // 5000 USDC
+  maxSlippage: 0.5,
+  protocols: ['Uniswap', '1inch', 'Paraswap'],
+  maxSplits: 3
+});
+```
+
+### Portfolio Management
+
+```typescript
+// Get portfolio analytics
+const analytics = await agent.analyzePortfolio([
+  '0x...', // USDC
+  '0x...'  // WETH
+]);
+
+console.log(`Portfolio Value: ${analytics.totalValue}`);
+console.log(`Sharpe Ratio: ${analytics.sharpeRatio}`);
+console.log(`Max Drawdown: ${analytics.maxDrawdown}%`);
 ```
 
 ## Configuration
 
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file:
 
 ```env
-OPENAI_API_KEY="your-openai-api-key"
-EVM_PRIVATE_KEY="your-private-key"
-RPC_URL="your-rpc-url"
-```
-
-## Usage
-
-### Basic Operations
-
-```typescript
-import { EVMAgent } from './src/EVMAgent';
-
-const agent = new EVMAgent();
-await agent.init('mainnet');
-
-// Natural language commands
-const response = await agent.execute(
-  "Swap 0.1 ETH for USDC with maximum 0.5% slippage"
-);
-
-// Direct function calls
-const swapResult = await agent.swap({
-  tokenIn: ethers.ZeroAddress, // ETH
-  tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
-  amountIn: ethers.parseEther('0.1').toString(),
-  slippage: 0.5,
-});
-```
-
-### AI-Powered Strategies
-
-```typescript
-// Market analysis and automated trading
-await agent.execute(
-  "Monitor ETH/USDC price and buy 0.1 ETH when RSI indicates oversold"
-);
-
-// Portfolio rebalancing
-await agent.execute(
-  "Rebalance my portfolio to maintain 60% ETH, 30% USDC, and 10% WBTC"
-);
-
-// Yield farming optimization
-await agent.execute(
-  "Find and allocate funds to the highest yielding USDC lending protocol"
-);
-```
-
-### Event Monitoring
-
-```typescript
-// Set up event listeners
-agent.onPriceChange('ETH', async (price, change) => {
-  if (change < -0.05) { // 5% drop
-    await agent.execute("Buy ETH worth 100 USDC");
-  }
-});
-
-// Monitor liquidation risks
-agent.monitorHealthFactor('Aave', async (healthFactor) => {
-  if (healthFactor < 1.5) {
-    await agent.execute("Repay 20% of my USDC loan");
-  }
-});
-```
-
-## Testing
-
-```bash
-npm test
+RPC_URL=your_rpc_url
+PRIVATE_KEY=your_private_key
 ```
 
 ## Contributing
 
-We welcome contributions! Please see our contributing guidelines for more details.
+Contributions are welcome! Please read our contributing guidelines before submitting PRs.
 
 ## License
 

@@ -1,20 +1,15 @@
-import { EVMAgent } from './EVMAgent.js';
-import dotenv from 'dotenv';
+import { ethers } from 'ethers';
+import { EVMAgent } from './EVMAgent';
 
-// Load environment variables
-dotenv.config();
-
-async function main() {
-  try {
-    const agent = new EVMAgent();
-    
-    // Test the agent's execute function
-    const response = await agent.execute('What is the current ETH price?');
-    console.log('Agent Response:', response);
-
-  } catch (error: any) {
-    console.error('Error:', error.message || 'Unknown error occurred');
-  }
+export async function createAgent(rpcUrl: string, privateKey: string) {
+  const provider = new ethers.JsonRpcProvider(rpcUrl);
+  const wallet = new ethers.Wallet(privateKey, provider);
+  return new EVMAgent(provider, wallet);
 }
 
-main();
+export { EVMAgent } from './EVMAgent';
+export * from './types';
+export * from './bridge/types';
+export * from './gas/types';
+export * from './portfolio/types';
+export * from './routing/types';
