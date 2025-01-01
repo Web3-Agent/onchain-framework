@@ -1,32 +1,14 @@
-# Web3 Agent AOF (AI Onchain Framework)
+# web3agent-aof
 
-A powerful framework for AI-powered onchain operations and DeFi interactions.
+A powerful framework for building AI-powered blockchain agents that can understand and execute operations using natural language.
 
 ## Features
 
-- **Smart Order Routing**
-  - Multi-DEX aggregation
-  - Split order optimization
-  - Gas-aware routing
-  - Price impact analysis
-
-- **Portfolio Analytics**
-  - Risk metrics tracking
-  - Performance analysis
-  - Position management
-  - Real-time portfolio monitoring
-
-- **Gas Optimization**
-  - Dynamic gas pricing
-  - MEV protection
-  - Transaction simulation
-  - Network congestion monitoring
-
-- **Cross-Chain Bridge**
-  - Multi-bridge support (LayerZero, Hop, Across)
-  - Best route finding
-  - Bridge fee optimization
-  - Transaction monitoring
+- Natural language processing for blockchain operations
+- Multi-chain support (Ethereum, BSC, Mode, Optimism)
+- AI-powered trade execution and optimization
+- Price and health factor monitoring
+- Automated DeFi operations
 
 ## Installation
 
@@ -37,133 +19,162 @@ npm install web3agent-aof
 ## Quick Start
 
 ```typescript
-import { createAgent } from 'web3agent-aof';
+import { EVMAgent, PromptExecutor } from 'web3agent-aof';
+import { ethers } from 'ethers';
 
-// Initialize agent
-const agent = await createAgent(
-  process.env.RPC_URL!,
-  process.env.PRIVATE_KEY!
+// Initialize provider and wallet
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
+
+// Create agent
+const agent = new EVMAgent(provider, wallet);
+
+// Initialize prompt executor
+const executor = new PromptExecutor(
+  new Map([['bsc', agent]]), 
+  process.env.OPENAI_API_KEY!
 );
 
-// Smart order routing
-const route = await agent.findBestRoute({
-  tokenIn: '0x...',  // USDC
-  tokenOut: '0x...', // WETH
-  amount: '1000000000', // 1000 USDC
-  maxSlippage: 0.5,
-  protocols: ['Uniswap', '1inch']
-});
-
-// Execute swap
-await agent.executeRoute(route);
-
-// Portfolio analysis
-const portfolio = await agent.analyzePortfolio([
-  '0x...', // USDC
-  '0x...'  // WETH
-]);
-
-// Bridge assets
-const bridgeQuote = await agent.getBridgeQuote({
-  sourceChain: 'ethereum',
-  targetChain: 'bnb',
-  token: '0x...', // USDC
-  amount: '1000000000',
-  bridgeProtocol: 'LayerZero'
-});
-
-await agent.bridge(bridgeQuote);
-
-// Monitor price changes
-agent.on('priceChange', (data) => {
-  console.log(`Price changed: ${data.token} ${data.price}`);
-});
-
-// Monitor health factor
-agent.on('healthFactorChange', (data) => {
-  console.log(`Health factor: ${data.healthFactor}`);
-});
+// Execute operations using natural language
+await executor.execute(
+  "Swap 1 USDC to BNB with 0.5% slippage on BSC using PancakeSwap"
+);
 ```
 
-## Advanced Usage
+## Supported Operations
 
-### Gas Optimization
-
+### Basic Operations
 ```typescript
-// Set gas strategy
-await agent.setGasStrategy({
-  type: 'aggressive',
-  maxPriorityFee: BigInt(3000000000), // 3 Gwei
-  maxFeePerGas: BigInt(50000000000),  // 50 Gwei
-  flashbotsEnabled: true
-});
+// Transfers
+"Transfer 0.1 BNB to 0x742d35Cc6634C0532925a3b844Bc454e4438f44e on BSC"
+"Send 50 USDC to 0x123... on Mode network"
+"Bridge 0.01 CCIP-BnM to MODE TESTNET"
 
-// Enable MEV protection
-await agent.enableMEVProtection();
+// Token Swaps
+"Swap 1 USDC to BNB with 0.5% slippage on BSC using PancakeSwap"
+"Swap 100 USDC for ETH on Mode network using Uniswap V3"
+"Trade 5000 BUSD for BNB with max 1% slippage on BSC"
+
+// Wrap/Unwrap
+"Wrap 1 BNB to WBNB on BSC"
+"Unwrap 0.5 WBNB to BNB on BSC"
+"Convert 2 ETH to WETH on Mode"
+
+// Approvals
+"Approve 100 USDC for PancakeSwap on BSC"
+"Allow Venus protocol to spend 1000 BUSD on BSC"
+"Grant unlimited USDC approval to Uniswap on Mode"
 ```
 
-### Split Orders
-
+### DeFi Operations
 ```typescript
-const splitRoute = await agent.splitOrder({
-  tokenIn: '0x...',  // USDC
-  tokenOut: '0x...', // WETH
-  amount: '5000000000', // 5000 USDC
-  maxSlippage: 0.5,
-  protocols: ['Uniswap', '1inch', 'Paraswap'],
-  maxSplits: 3
-});
+// Lending
+"Lend 100 USDC on Venus protocol on BSC network"
+"Supply 1000 BUSD to Venus with 3% minimum APY"
+"Deposit 50 USDC to Aave on Mode network"
+
+// Borrowing
+"Borrow 50 BUSD using 200 USDC as collateral on Venus protocol on BSC"
+"Take a loan of 1000 USDC using 2 ETH as collateral on Aave"
+"Borrow 500 DAI against my WBTC on Mode"
+
+// Liquidity Provision
+"Add liquidity with 1 BNB and 100 USDC to PancakeSwap on BSC"
+"Remove liquidity of 0.5 BNB and 50 USDC from PancakeSwap on BSC"
+"Provide 2000 USDC and 1 ETH liquidity to Uniswap V3"
+
+// Yield Farming
+"Stake LP tokens in PancakeSwap farm on BSC"
+"Harvest rewards from Venus protocol"
+"Compound yields from my lending positions"
 ```
 
-### Portfolio Management
-
+### Advanced Operations
 ```typescript
-// Get portfolio analytics
-const analytics = await agent.analyzePortfolio([
-  '0x...', // USDC
-  '0x...'  // WETH
-]);
+// Multi-Step Operations
+"Swap 1000 USDC to BNB and add liquidity to PancakeSwap"
+"Borrow 500 BUSD against USDC and swap to BNB"
+"Withdraw liquidity from Uniswap and stake in farm"
 
-console.log(`Portfolio Value: ${analytics.totalValue}`);
-console.log(`Sharpe Ratio: ${analytics.sharpeRatio}`);
-console.log(`Max Drawdown: ${analytics.maxDrawdown}%`);
+// Price Monitoring
+"Monitor BNB price and alert when above $300"
+"Track USDC/BNB price changes every hour"
+"Watch ETH price on Mode network"
+
+// Health Factor Monitoring
+"Monitor my Venus health factor and alert below 1.5"
+"Track Aave position health on Mode"
+"Alert when collateral ratio drops below 150%"
 ```
 
 ## Configuration
 
-Create a `.env` file:
+Create a `.env` file with the following:
 
 ```env
+# RPC URLs
 RPC_URL=your_rpc_url
+
+# Wallet
 PRIVATE_KEY=your_private_key
-OPENAI_API_KEY=your_openai_api_key  # Required for AI features
+
+# OpenAI API Key (Required for AI features)
+OPENAI_API_KEY=your_openai_api_key
+
+# Optional Protocol Settings
+DEFAULT_SLIPPAGE=0.5
+GAS_MULTIPLIER=1.1
 ```
 
-## Features in Development
+## Examples
 
-1. **MEV Protection & Gas Optimization**
-   - Advanced gas fee strategies
-   - Flashbots integration
-   - Bundle transactions
+Check out the [examples](./examples) directory for complete working examples:
 
-2. **Cross-Chain Bridge Integration**
-   - Support for more bridges (Stargate, Synapse)
-   - Optimized bridge selection
-   - Bridge aggregation
+- [Prompt Operations](./examples/prompt-operations): Natural language operations
+- [DeFi Monitor](./examples/defi-monitor): Price and health factor monitoring
+- [Swap Bot](./examples/swap-bot): Automated token swapping
 
-3. **Smart Order Routing & Aggregation**
-   - Support for more DEXs
-   - Advanced routing algorithms
-   - MEV-aware routing
+## Advanced Usage
 
-4. **Risk Management & Automation**
-   - Advanced portfolio analytics
-   - Automated rebalancing
-   - Risk-adjusted returns
+### Custom Operation Handlers
+```typescript
+const agent = new EVMAgent(provider, wallet);
 
-## Contributing
+// Add custom operation handler
+agent.on('priceChange', (data) => {
+  if (data.percentageChange > 5) {
+    console.log(`${data.token} price increased by ${data.percentageChange}%`);
+  }
+});
 
-Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+// Monitor multiple tokens
+agent.monitorPriceChange('BNB', callback);
+agent.monitorPriceChange('USDC', callback);
+```
+
+### Health Factor Monitoring
+```typescript
+// Monitor DeFi positions
+agent.monitorHealthFactor('venus', (data) => {
+  if (data.healthFactor < 1.5) {
+    console.log('Warning: Low health factor on Venus!');
+  }
+});
+```
+
+### Multi-Chain Operations
+```typescript
+const agents = new Map([
+  ['bsc', new EVMAgent(bscProvider, wallet)],
+  ['mode', new EVMAgent(modeProvider, wallet)],
+  ['ethereum', new EVMAgent(ethProvider, wallet)]
+]);
+
+const executor = new PromptExecutor(agents, process.env.OPENAI_API_KEY!);
+
+// Execute cross-chain operations
+await executor.execute("Bridge 0.01 CCIP-BnM from BSC to Mode Testnet");
+```
 
 ## License
 

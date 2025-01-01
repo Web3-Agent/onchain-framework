@@ -1,15 +1,19 @@
 import { ethers } from 'ethers';
 import { EVMAgent } from './EVMAgent';
 
-export async function createAgent(rpcUrl: string, privateKey: string) {
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
-  const wallet = new ethers.Wallet(privateKey, provider);
-  return new EVMAgent(provider, wallet);
-}
-
 export { EVMAgent } from './EVMAgent';
 export * from './types';
-export * from './bridge/types';
-export * from './gas/types';
-export * from './portfolio/types';
-export * from './routing/types';
+export * from './prompts/types';
+export { PromptParser } from './prompts/parser';
+export { PromptExecutor } from './prompts/executor';
+
+// Re-export common types
+export type {
+  PriceChangeData,
+  HealthFactorData,
+  TradeAnalysis,
+  TimingSuggestion,
+  GasStrategy,
+  AITradeParams,
+  AITradeResult
+} from './types';

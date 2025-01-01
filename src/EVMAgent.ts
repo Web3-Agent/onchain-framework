@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { EventEmitter } from 'events';
 import { PriceChangeData, HealthFactorData } from './types';
+import { OperationType } from './prompts/types';
 
 type PriceChangeCallback = (data: PriceChangeData) => void;
 type HealthFactorCallback = (data: HealthFactorData) => void;
@@ -144,5 +145,74 @@ export class EVMAgent extends EventEmitter {
   private async getHealthFactor(protocol: string): Promise<number> {
     // Implementation using protocol-specific methods (e.g., Aave)
     return 0; // Placeholder
+  }
+
+  async executeTradeWithAI(params: {
+    operation: OperationType;
+    network: string;
+    [key: string]: any;
+  }) {
+    switch (params.operation) {
+      case 'swap':
+        return this.executeSwap(params);
+      case 'transfer':
+        return this.executeTransfer(params);
+      case 'wrap':
+      case 'unwrap':
+        return this.executeWrap(params);
+      case 'approve':
+        return this.executeApprove(params);
+      case 'send':
+        return this.executeSend(params);
+      case 'lend':
+        return this.executeLend(params);
+      case 'borrow':
+        return this.executeBorrow(params);
+      case 'addLiquidity':
+      case 'removeLiquidity':
+        return this.executeLiquidity(params);
+      default:
+        throw new Error(`Unsupported operation: ${params.operation}`);
+    }
+  }
+
+  private async executeSwap(params: any) {
+    // Implement swap logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeTransfer(params: any) {
+    // Implement transfer logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeWrap(params: any) {
+    // Implement wrap/unwrap logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeApprove(params: any) {
+    // Implement approval logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeSend(params: any) {
+    // Implement send logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeLend(params: any) {
+    // Implement lending logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeBorrow(params: any) {
+    // Implement borrowing logic
+    throw new Error('Not implemented');
+  }
+
+  private async executeLiquidity(params: any) {
+    // Implement liquidity provision/removal logic
+    throw new Error('Not implemented');
   }
 } 
