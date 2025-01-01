@@ -1,4 +1,4 @@
-# AI Onchain Framework
+# Web3 Agent AOF (AI Onchain Framework)
 
 A powerful framework for AI-powered onchain operations and DeFi interactions.
 
@@ -31,19 +31,19 @@ A powerful framework for AI-powered onchain operations and DeFi interactions.
 ## Installation
 
 ```bash
-npm install ai-onchain-framework
+npm install web3agent-aof
 ```
 
 ## Quick Start
 
 ```typescript
-import { EVMAgent } from 'ai-onchain-framework';
+import { createAgent } from 'web3agent-aof';
 
 // Initialize agent
-const agent = new EVMAgent({
-  rpcUrl: process.env.RPC_URL,
-  privateKey: process.env.PRIVATE_KEY
-});
+const agent = await createAgent(
+  process.env.RPC_URL!,
+  process.env.PRIVATE_KEY!
+);
 
 // Smart order routing
 const route = await agent.findBestRoute({
@@ -137,6 +137,28 @@ Create a `.env` file:
 RPC_URL=your_rpc_url
 PRIVATE_KEY=your_private_key
 ```
+
+## Features in Development
+
+1. **MEV Protection & Gas Optimization**
+   - Advanced gas fee strategies
+   - Flashbots integration
+   - Bundle transactions
+
+2. **Cross-Chain Bridge Integration**
+   - Support for more bridges (Stargate, Synapse)
+   - Optimized bridge selection
+   - Bridge aggregation
+
+3. **Smart Order Routing & Aggregation**
+   - Support for more DEXs
+   - Advanced routing algorithms
+   - MEV-aware routing
+
+4. **Risk Management & Automation**
+   - Advanced portfolio analytics
+   - Automated rebalancing
+   - Risk-adjusted returns
 
 ## Contributing
 
