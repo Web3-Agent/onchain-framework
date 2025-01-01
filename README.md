@@ -136,6 +136,7 @@ Create a `.env` file:
 ```env
 RPC_URL=your_rpc_url
 PRIVATE_KEY=your_private_key
+OPENAI_API_KEY=your_openai_api_key  # Required for AI features
 ```
 
 ## Features in Development
